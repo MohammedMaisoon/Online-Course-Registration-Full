@@ -1,0 +1,360 @@
+{% extends 'base.html' %}
+{% block title %}{{ course.title }} - LearnHub{% endblock %}
+{% block content %}
+<div class="course-detail-wrapper" style="background-color: var(--dark-bg); padding: 3rem 0;">
+    <div class="container">
+        <div class="course-header" style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; color: var(--light-text);">
+            <div class="course-info">
+                <div style="margin-bottom: 1rem;">
+                    <span style="background-color: var(--primary-color); color: var(--dark-bg); padding: 0.3rem 0.7rem; border-radius: 4px; font-size: 0.9rem; font-weight: 600;">{{ course.category }}</span>
+                    <span style="background-color: rgba(255,255,255,0.1); padding: 0.3rem 0.7rem; border-radius: 4px; font-size: 0.9rem; margin-left: 0.5rem;">{{ course.level }}</span>
+                </div>
+                
+                <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">{{ course.title }}</h1>
+                
+                <p style="margin-bottom: 1.5rem; font-size: 1.1rem; line-height: 1.6;">{{ course.description }}</p>
+                
+                <div style="display: flex; gap: 2rem; margin-bottom: 1.5rem;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-user" style="color: var(--primary-color);"></i>
+                        <span>{{ course.students_count }} students</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-star" style="color: var(--primary-color);"></i>
+                        <span>{{ avg_rating|round(1) }} ({{ reviews|length }} reviews)</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-clock" style="color: var(--primary-color);"></i>
+                        <span>{{ course.duration }} hours</span>
+                    </div>
+                </div>
+                
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <img src="{{ url_for('static', filename='img/avatar-placeholder.png') }}" alt="{{ instructor.first_name }} {{ instructor.last_name }}" style="width: 50px; height: 50px; border-radius: 50%;">
+                    <div>
+                        <p style="font-weight: 600; margin-bottom: 0.2rem;">{{ instructor.first_name }} {{ instructor.last_name }}</p>
+                        <p style="font-size: 0.9rem; opacity: 0.8;">Instructor</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="course-enrollment" style="background-color: white; border-radius: var(--border-radius); padding: 2rem; color: var(--text-color);">
+                <div style="text-align: center; margin-bottom: 1.5rem;">
+                    <div class="course-image">
+                        <img src="{{ url_for('static', filename='img/course-placeholder.jpg') }}" alt="{{ course.title }}">
+                    </div>
+                    
+                    <div style="font-size: 2rem; font-weight: 700; color: var(--dark-bg); margin-bottom: 0.5rem;">
+                        {% if course.price == 0 %}
+                            Free
+                        {% else %}
+                            ₹{{ course.price }}
+                        {% endif %}
+                    </div>
+                </div>
+                
+                {% if is_enrolled %}
+                    <a href="{{ url_for('learn', course_id=course.id) }}" class="btn-primary" style="display: block; text-align: center; text-decoration: none;">Continue Learning</a>
+                {% else %}
+                    <form action="{{ url_for('enroll', course_id=course.id) }}" method="post">
+                        <button type="submit" class="btn-primary" style="width: 100%;">Enroll Now</button>
+                    </form>
+                {% endif %}
+                
+                <div style="margin-top: 1.5rem;">
+                    <h3 style="font-size: 1.2rem; margin-bottom: 1rem;">This course includes:</h3>
+                    <ul style="list-style: none;">
+                        <li style="display: flex; align-items: center; gap: 0.7rem; margin-bottom: 0.7rem;">
+                            <i class="fas fa-video" style="color: var(--primary-color);"></i>
+                            <span>{{ modules|length }} modules</span>
+                        </li>
+                        <li style="display: flex; align-items: center; gap: 0.7rem; margin-bottom: 0.7rem;">
+                            <i class="fas fa-file-alt" style="color: var(--primary-color);"></i>
+                            <span>{{ course.resources_count|default(0) }} downloadable resources</span>
+                        </li>
+                        <li style="display: flex; align-items: center; gap: 0.7rem; margin-bottom: 0.7rem;">
+                            <i class="fas fa-infinity" style="color: var(--primary-color);"></i>
+                            <span>Full lifetime access</span>
+                        </li>
+                        <li style="display: flex; align-items: center; gap: 0.7rem; margin-bottom: 0.7rem;">
+                            <i class="fas fa-certificate" style="color: var(--primary-color);"></i>
+                            <span>Certificate of completion</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+<div class="course-content container" style="padding: 4rem 0;">
+    <div class="content-tabs" style="border-bottom: 1px solid var(--border-color); margin-bottom: 2rem;">
+        <ul style="display: flex; list-style: none; gap: 2rem;">
+            <li><a href="#overview" class="active" style="display: inline-block; padding: 0.7rem 0; font-weight: 600; border-bottom: 3px solid var(--primary-color); color: var(--dark-bg); text-decoration: none;">Overview</a></li>
+            <li><a href="#curriculum" style="display: inline-block; padding: 0.7rem 0; font-weight: 600; color: var(--text-color); text-decoration: none;">Curriculum</a></li>
+            <li><a href="#reviews" style="display: inline-block; padding: 0.7rem 0; font-weight: 600; color: var(--text-color); text-decoration: none;">Reviews</a></li>
+        </ul>
+    </div>
+    
+    <div id="overview" class="tab-content" style="display: grid; grid-template-columns: 2fr 1fr; gap: 3rem;">
+        <div class="overview-content">
+            <h2 style="font-size: 1.8rem; margin-bottom: 1.5rem; color: var(--dark-bg);">About This Course</h2>
+            <div style="margin-bottom: 2rem;">
+                <p style="margin-bottom: 1rem; line-height: 1.6;">{{ course.long_description|default(course.description) }}</p>
+            </div>
+            
+            <h2 style="font-size: 1.8rem; margin-bottom: 1.5rem; color: var(--dark-bg);">What You'll Learn</h2>
+            <div class="learning-outcomes" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;">
+                {% for i in range(1, 7) %}
+                    <div style="display: flex; gap: 0.7rem; align-items: flex-start;">
+                        <i class="fas fa-check" style="color: var(--primary-color); margin-top: 0.3rem;"></i>
+                        <span>Learning outcome {{ i }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+            
+            <h2 style="font-size: 1.8rem; margin-bottom: 1.5rem; color: var(--dark-bg);">Requirements</h2>
+            <ul style="list-style: none; margin-bottom: 2rem;">
+                <li style="display: flex; gap: 0.7rem; align-items: flex-start; margin-bottom: 0.7rem;">
+                    <i class="fas fa-circle" style="color: var(--primary-color); font-size: 0.5rem; margin-top: 0.6rem;"></i>
+                    <span>Basic understanding of {{ course.category }}</span>
+                </li>
+                <li style="display: flex; gap: 0.7rem; align-items: flex-start; margin-bottom: 0.7rem;">
+                    <i class="fas fa-circle" style="color: var(--primary-color); font-size: 0.5rem; margin-top: 0.6rem;"></i>
+                    <span>Access to a computer with internet connection</span>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="instructor-profile">
+            <div style="background-color: white; border-radius: var(--border-radius); padding: 2rem; box-shadow: var(--box-shadow);">
+                <h2 style="font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--dark-bg);">Meet Your Instructor</h2>
+                
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                    <img src="{{ url_for('static', filename='img/avatar-placeholder.png') }}" alt="{{ instructor.first_name }} {{ instructor.last_name }}" style="width: 70px; height: 70px; border-radius: 50%;">
+                    <div>
+                        <p style="font-weight: 600; font-size: 1.2rem; margin-bottom: 0.3rem;">{{ instructor.first_name }} {{ instructor.last_name }}</p>
+                        <p style="font-size: 0.9rem; color: #666;">{{ instructor.role|title }}</p>
+                    </div>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; margin-bottom: 1.5rem;">
+                    <div>
+                        <p style="font-size: 0.9rem; color: #666; margin-bottom: 0.3rem;">Courses</p>
+                        <p style="font-weight: 600; color: var(--dark-bg);">12</p>
+                    </div>
+                    <div>
+                        <p style="font-size: 0.9rem; color: #666; margin-bottom: 0.3rem;">Students</p>
+                        <p style="font-weight: 600; color: var(--dark-bg);">5,240</p>
+                    </div>
+                    <div>
+                        <p style="font-size: 0.9rem; color: #666; margin-bottom: 0.3rem;">Rating</p>
+                        <p style="font-weight: 600; color: var(--dark-bg);">4.8</p>
+                    </div>
+                </div>
+                
+                <p style="line-height: 1.6; margin-bottom: 1.5rem;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. In hac habitasse platea dictumst. Vivamus in nisi felis.</p>
+                
+                <a href="#" style="display: inline-block; text-decoration: none; color: var(--primary-color); font-weight: 600;">View Profile</a>
+            </div>
+        </div>
+    </div>
+    
+    <div id="curriculum" class="tab-content" style="display: none;">
+        <h2 style="font-size: 1.8rem; margin-bottom: 1.5rem; color: var(--dark-bg);">Course Curriculum</h2>
+        
+        <div class="accordion" style="margin-bottom: 2rem;">
+            {% for module in modules %}
+                <div class="accordion-item" style="margin-bottom: 1rem; border: 1px solid var(--border-color); border-radius: var(--border-radius); overflow: hidden;">
+                    <div class="accordion-header" style="padding: 1.2rem; background-color: #f9f9f9; display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
+                        <div>
+                            <h3 style="font-size: 1.1rem; color: var(--dark-bg);">{{ module.title }}</h3>
+                            <p style="font-size: 0.9rem; color: #666;">{{ module.lessons|default(0) }} lessons • {{ module.duration|default(0) }} min</p>
+                        </div>
+                        <i class="fas fa-chevron-down" style="color: var(--primary-color);"></i>
+                    </div>
+                    <div class="accordion-content" style="display: none; padding: 1.2rem; border-top: 1px solid var(--border-color);">
+                        <ul style="list-style: none;">
+                            <li style="display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 0; border-bottom: 1px solid var(--border-color);">
+                                <div style="display: flex; align-items: center; gap: 0.7rem;">
+                                    <i class="fas fa-play-circle" style="color: var(--primary-color);"></i>
+                                    <span>Introduction to the Module</span>
+                                </div>
+                                <span style="font-size: 0.9rem; color: #666;">10:15</span>
+                            </li>
+                            <li style="display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 0; border-bottom: 1px solid var(--border-color);">
+                                <div style="display: flex; align-items: center; gap: 0.7rem;">
+                                    <i class="fas fa-file-alt" style="color: var(--primary-color);"></i>
+                                    <span>Reading Materials</span>
+                                </div>
+                                <span style="font-size: 0.9rem; color: #666;">05:30</span>
+                            </li>
+                            <li style="display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 0;">
+                                <div style="display: flex; align-items: center; gap: 0.7rem;">
+                                    <i class="fas fa-puzzle-piece" style="color: var(--primary-color);"></i>
+                                    <span>Practice Exercise</span>
+                                </div>
+                                <span style="font-size: 0.9rem; color: #666;">15:00</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div id="reviews" class="tab-content" style="display: none;">
+        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 3rem;">
+            <div class="reviews-summary" style="background-color: white; border-radius: var(--border-radius); padding: 2rem; box-shadow: var(--box-shadow);">
+                <h2 style="font-size: 1.8rem; margin-bottom: 1rem; color: var(--dark-bg);">Student Feedback</h2>
+                
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <div style="font-size: 4rem; font-weight: 700; color: var(--dark-bg); line-height: 1;">{{ avg_rating|round(1) }}</div>
+                    <div style="margin: 0.5rem 0 1rem;">
+                        {% for i in range(1, 6) %}
+                            {% if i <= avg_rating|round(0, 'common') %}
+                                <i class="fas fa-star" style="color: var(--primary-color);"></i>
+                            {% else %}
+                                <i class="far fa-star" style="color: var(--primary-color);"></i>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <p style="color: #666;">Course Rating</p>
+                </div>
+                
+                <div class="rating-bars">
+                    {% for i in range(5, 0, -1) %}
+                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.7rem;">
+                            <div style="min-width: 30px;">{{ i }} star</div>
+                            <div style="flex-grow: 1; height: 8px; background-color: var(--border-color); border-radius: 4px; overflow: hidden;">
+                                {% set percentage = ((reviews|selectattr('rating', 'eq', i)|list|length / reviews|length) * 100) if reviews|length > 0 else 0 %}
+                                <div style="height: 100%; width: {{ percentage }}%; background-color: var(--primary-color);"></div>
+                            </div>
+                            <div style="min-width: 40px; text-align: right; font-size: 0.9rem; color: #666;">{{ percentage|int }}%</div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <div class="reviews-list">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                    <h2 style="font-size: 1.8rem; color: var(--dark-bg);">Reviews</h2>
+                    
+                    {% if is_enrolled %}
+                        <button style="background-color: var(--primary-color); color: var(--dark-bg); border: none; border-radius: var(--border-radius); padding: 0.7rem 1.5rem; font-weight: 600; cursor: pointer;">Write a Review</button>
+                    {% endif %}
+                </div>
+                
+                {% if reviews %}
+                    {% for review in reviews %}
+                        <div style="margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border-color);">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                                <div style="display: flex; align-items: center; gap: 1rem;">
+                                    <img src="{{ url_for('static', filename='img/avatar-placeholder.png') }}" alt="{{ review.first_name }} {{ review.last_name }}" style="width: 50px; height: 50px; border-radius: 50%;">
+                                    <div>
+                                        <p style="font-weight: 600; margin-bottom: 0.2rem;">{{ review.first_name }} {{ review.last_name }}</p>
+                                        <p style="font-size: 0.9rem; color: #666;">{{ review.created_at.strftime('%B %d, %Y') }}</p>
+                                    </div>
+                                </div>
+                                <div>
+                                    {% for i in range(1, 6) %}
+                                        {% if i <= review.rating %}
+                                            <i class="fas fa-star" style="color: var(--primary-color);"></i>
+                                        {% else %}
+                                            <i class="far fa-star" style="color: var(--primary-color);"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <p style="line-height: 1.6;">{{ review.comment }}</p>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div style="text-align: center; padding: 3rem 0;">
+                        <i class="far fa-comment-alt" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+                        <p style="color: #666;">No reviews yet. Be the first to review this course!</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="background-color: #f1f5f9; padding: 4rem 0;">
+    <div class="container">
+        <h2 style="font-size: 2rem; text-align: center; margin-bottom: 3rem; color: var(--dark-bg);">Similar Courses</h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem;">
+            {% for i in range(1, 4) %}
+                <div class="course-card" style="background-color: white; border-radius: var(--border-radius); overflow: hidden; box-shadow: var(--box-shadow); transition: transform 0.3s ease;">
+                    <div style="height: 180px; background-color: var(--dark-bg);"></div>
+                    <div style="padding: 1.5rem;">
+                        <h3 style="margin-bottom: 0.75rem; color: var(--dark-bg);">Similar Course {{ i }}</h3>
+                        <p style="margin-bottom: 1rem; color: #666;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi.</p>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="fas fa-star" style="color: var(--primary-color);"></i>
+                                <span style="font-size: 0.9rem; color: #666;">4.5</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="fas fa-user" style="color: var(--primary-color);"></i>
+                                <span style="font-size: 0.9rem; color: #666;">1,234</span>
+                            </div>
+                            <div>
+                                <span style="font-weight: 600; color: var(--dark-bg);">₹49</span>
+                            </div>
+                        </div>
+                        <a href="#" style="display: inline-block; width: 100%; padding: 0.6rem 0; background-color: var(--primary-color); color: var(--dark-bg); text-align: center; text-decoration: none; border-radius: var(--border-radius); font-weight: 600;">View Course</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+    // Tab switching functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const tabs = document.querySelectorAll('.content-tabs a');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all tabs
+                tabs.forEach(t => t.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                this.classList.add('active');
+                
+                // Hide all tab contents
+                tabContents.forEach(content => {
+                    content.style.display = 'none';
+                });
+                
+                // Show the clicked tab content
+                const target = this.getAttribute('href').substring(1);
+                document.getElementById(target).style.display = target === 'overview' ? 'grid' : 'block';
+            });
+        });
+        
+        // Accordion functionality
+        const accordionHeaders = document.querySelectorAll('.accordion-header');
+        
+        accordionHeaders.forEach(header => {
+            header.addEventListener('click', function() {
+                const content = this.nextElementSibling;
+                const icon = this.querySelector('i');
+                
+                if (content.style.display === 'block') {
+                    content.style.display = 'none';
+                    icon.classList.remove('fa-chevron-up');
+                    icon.classList.add('fa-chevron-down');
+                } else {
+                    content.style.display = 'block';
+                    icon.classList.remove('fa-chevron-down');
+                    icon.classList.add('fa-chevron-up');
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

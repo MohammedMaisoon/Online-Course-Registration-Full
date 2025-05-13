@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Course Registration</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Removed incorrect image tag from head section -->
+</head>
+<body>
+    
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                <h1>Online Course Registration</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="/" class="active">Home</a></li>
+                    <li><a href="/courses">Courses</a></li>
+                    <li><a href="/about">About</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                    <li><a href="/login" class="btn-login">Login</a></li>
+                    <li><a href="/register" class="btn-register">Register</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main>
+            <section class="hero">
+                <div class="hero-content">
+                    <h2>Welcome to Our Online Learning Journey</h2>
+                    <p>Explore educational courses designed to deepen your understanding and skills.</p>
+                    <div class="cta-buttons">
+                        <a href="/register" class="cta-primary">Get Started</a>
+                        <a href="/courses" class="cta-secondary">Browse Courses</a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="features">
+                <h2>Why Choose Our Courses</h2>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <i class="fas fa-book-open"></i>
+                        <h3>Enriching Content</h3>
+                        <p>Carefully crafted educational materials to guide your learning journey.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-users"></i>
+                        <h3>Community Learning</h3>
+                        <p>Connect with fellow learners and experienced mentors.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-laptop"></i>
+                        <h3>Flexible Learning</h3>
+                        <p>Study at your own pace from anywhere in the world.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-certificate"></i>
+                        <h3>Certification</h3>
+                        <p>Receive recognition for your completed courses and achievements.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="popular-courses">
+                <h2>Featured Courses</h2>
+                <div class="course-grid">
+                    {% for course in featured_courses %}
+                    <div class="course-card">
+                        <div class="course-image">
+                            <!-- Updated to use placeholder image -->
+                            <img src="{{ url_for('static', filename='img/course-placeholder.jpg') }}" alt="{{ course.title }}">
+                        </div>
+                        <div class="course-content">
+                            <h3>{{ course.title }}</h3>
+                            <p>{{ course.description[:100] }}{% if course.description|length > 100 %}...{% endif %}</p>
+                            <div class="course-meta">
+                                <span><i class="fas fa-clock"></i> {{ course.duration|default('8 Weeks') }}</span>
+                                <span><i class="fas fa-user-graduate"></i> {{ course.level|default('Beginner') }}</span>
+                            </div>
+                            <a href="{{ url_for('course_detail', course_id=course.id) }}" class="btn-course">Learn More</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    
+                    <!-- If no featured courses are available, show defaults -->
+                    {% if not featured_courses %}
+                    <div class="course-card">
+                        <div class="course-image" style="background-color: #1a3c6e;"></div>
+                        <div class="course-content">
+                            <h3>Introduction to Professional Studies</h3>
+                            <p>Explore the foundational texts and their historical context.</p>
+                            <div class="course-meta">
+                                <span><i class="fas fa-clock"></i> 8 Weeks</span>
+                                <span><i class="fas fa-user-graduate"></i> Beginner</span>
+                            </div>
+                            <a href="/course/1" class="btn-course">Learn More</a>
+                        </div>
+                    </div>
+                    <div class="course-card">
+                        <div class="course-image" style="background-color: #1a3c6e;"></div>
+                        <div class="course-content">
+                            <h3>Personal Development Practices</h3>
+                            <p>Develop daily disciplines for growth and reflection.</p>
+                            <div class="course-meta">
+                                <span><i class="fas fa-clock"></i> 6 Weeks</span>
+                                <span><i class="fas fa-user-graduate"></i> All Levels</span>
+                            </div>
+                            <a href="/course/2" class="btn-course">Learn More</a>
+                        </div>
+                    </div>
+                    <div class="course-card">
+                        <div class="course-image" style="background-color: #1a3c6e;"></div>
+                        <div class="course-content">
+                            <h3>Community Leadership</h3>
+                            <p>Learn how to guide and support others in their learning journey.</p>
+                            <div class="course-meta">
+                                <span><i class="fas fa-clock"></i> 10 Weeks</span>
+                                <span><i class="fas fa-user-graduate"></i> Intermediate</span>
+                            </div>
+                            <a href="/course/3" class="btn-course">Learn More</a>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>"Skills On Demand"</h3>
+                    <p>Providing quality education and resources since 2023.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/courses">Courses</a></li>
+                        <li><a href="/register">Register</a></li>
+                        <li><a href="/login">Login</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <p><i class="fas fa-envelope"></i> contact@skillsondemand.org</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Follow Us</h3>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Skills On Demand. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

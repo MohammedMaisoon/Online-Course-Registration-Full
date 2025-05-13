@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - LearnHub{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-graduation-cap"></i>
+            <h2>LearnHub</h2>
+        </div>
+        
+        <div class="user-info">
+            <div class="user-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="user-name">{{ session.user_name }}</div>
+            <div class="user-email">{{ session.user_email }}</div>
+        </div>
+        
+        <ul class="sidebar-menu">
+            <li><a href="{{ url_for('dashboard') }}" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="#"><i class="fas fa-book"></i> My Courses</a></li>
+            <li><a href="#"><i class="fas fa-certificate"></i> Certificates</a></li>
+            <li><a href="#"><i class="fas fa-calendar-alt"></i> Calendar</a></li>
+            <li><a href="#"><i class="fas fa-comment-alt"></i> Messages</a></li>
+            <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+            <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </div>
+    
+    <div class="main-content">
+        <div class="dashboard-header">
+            <div class="welcome-msg">
+                <h2>Welcome back, {{ session.user_name.split()[0] }}!</h2>
+                <p>Here's an overview of your learning progress</p>
+            </div>
+            <div class="header-actions">
+                <a href="{{ url_for('courses') }}" class="cta-primary">Find New Courses</a>
+            </div>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Enrolled Courses</h3>
+                    <p>{{ enrolled_courses|length }}</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-tasks"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>In Progress</h3>
+                    <p>{{ in_progress_count }}</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Completed</h3>
+                    <p>{{ completed_count }}</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Hours Learned</h3>
+                    <p>{{ (enrolled_courses|sum(attribute='progress') / 100 * 10)|round|int }}</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="recent-courses">
+            <div class="section-header">
+                <h2>Recent Courses</h2>
+                <a href="#" class="see-all">See All <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            {% if enrolled_courses %}
+                {% for course in enrolled_courses[:3] %}
+                <div class="course-item">
+                    <div class="course-thumbnail">
+                        <img src="{{ url_for('static', filename='img/courses/' + course.image) }}" alt="{{ course.title }}" onerror="this.src='{{ url_for('static', filename='img/course-placeholder.jpg') }}'">
+                    </div>
+                    <div class="course-details">
+                        <h3>{{ course.title }}</h3>
+                        <div class="progress-container">
+                            <div class="progress-bar" style="width: {{ course.progress }}%;"></div>
+                        </div>
+                        <div class="progress-info">
+                            <span>{{ course.progress }}% Complete</span>
+                            <a href="{{ url_for('learn', course_id=course.id) }}">Continue</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p>You haven't enrolled in any courses yet. <a href="{{ url_for('courses') }}">Browse our courses</a> to get started!</p>
+            {% endif %}
+        </div>
+        
+        <div class="my-progress">
+            <div class="section-header">
+                <h2>Upcoming Assignments</h2>
+                <a href="#" class="see-all">See All <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            {% if upcoming_assignments %}
+                {% for assignment in upcoming_assignments %}
+                <div class="course-progress-card">
+                    <div class="course-progress-info">
+                        <h3 class="course-progress-name">{{ assignment.title }}</h3>
+                        <p>Course: {{ assignment.course_title }}</p>
+                        <p>Due Date: {{ assignment.due_date.strftime('%b %d, %Y') }}</p>
+                    </div>
+                    <div class="course-action">
+                        <a href="#"><i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p>You have no upcoming assignments.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

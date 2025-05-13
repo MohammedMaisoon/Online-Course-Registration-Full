@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Resources - Skills On Demand</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                <h1>Online Course Registration</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/courses">Courses</a></li>
+                    <li><a href="/learn" class="active">Learning</a></li>
+                    <li><a href="/about">About</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                    <li><a href="/login" class="btn-login">Login</a></li>
+                    <li><a href="/register" class="btn-register">Register</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main>
+            <section class="hero">
+                <div class="hero-content">
+                    <h2>Learning Resources & Methods</h2>
+                    <p>Discover effective learning strategies and resources to maximize your educational journey.</p>
+                    <div class="cta-buttons">
+                        <a href="/resources" class="cta-primary">Explore Resources</a>
+                        <a href="/methods" class="cta-secondary">Learning Methods</a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="learning-approaches">
+                <h2>Our Learning Approach</h2>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <i class="fas fa-brain"></i>
+                        <h3>Active Learning</h3>
+                        <p>Engage with material through practice exercises, discussions, and real-world applications.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-project-diagram"></i>
+                        <h3>Project-Based</h3>
+                        <p>Apply your knowledge through comprehensive projects that simulate real-world scenarios.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-comments"></i>
+                        <h3>Community Support</h3>
+                        <p>Learn collaboratively with peers and receive guidance from experienced mentors.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>Progress Tracking</h3>
+                        <p>Monitor your advancement with detailed analytics and personalized feedback.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="learning-resources">
+                <h2>Essential Learning Resources</h2>
+                <div class="resource-grid">
+                    <div class="resource-card">
+                        <div class="resource-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="resource-content">
+                            <h3>Digital Library</h3>
+                            <p>Access our extensive collection of e-books, journals, and academic papers relevant to your courses.</p>
+                            <a href="/library" class="btn-resource">Browse Library</a>
+                        </div>
+                    </div>
+                    <div class="resource-card">
+                        <div class="resource-icon">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <div class="resource-content">
+                            <h3>Video Tutorials</h3>
+                            <p>Visual learners can benefit from our comprehensive collection of instructional videos and demonstrations.</p>
+                            <a href="/videos" class="btn-resource">Watch Tutorials</a>
+                        </div>
+                    </div>
+                    <div class="resource-card">
+                        <div class="resource-icon">
+                            <i class="fas fa-clipboard-list"></i>
+                        </div>
+                        <div class="resource-content">
+                            <h3>Practice Exercises</h3>
+                            <p>Reinforce your learning with interactive exercises designed to test and strengthen your knowledge.</p>
+                            <a href="/exercises" class="btn-resource">Try Exercises</a>
+                        </div>
+                    </div>
+                    <div class="resource-card">
+                        <div class="resource-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="resource-content">
+                            <h3>Study Groups</h3>
+                            <p>Join virtual study sessions with fellow learners to discuss course materials and solve problems together.</p>
+                            <a href="/study-groups" class="btn-resource">Join Groups</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="learning-methods">
+                <h2>Effective Learning Methods</h2>
+                <div class="methods-container">
+                    <div class="method-item">
+                        <div class="method-number">01</div>
+                        <div class="method-content">
+                            <h3>Spaced Repetition</h3>
+                            <p>Rather than cramming, revisit information at increasing intervals to improve long-term retention.</p>
+                            <a href="/methods/spaced-repetition" class="learn-more">Learn how <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="method-item">
+                        <div class="method-number">02</div>
+                        <div class="method-content">
+                            <h3>Retrieval Practice</h3>
+                            <p>Test yourself regularly to strengthen memory recall and identify knowledge gaps.</p>
+                            <a href="/methods/retrieval-practice" class="learn-more">Learn how <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="method-item">
+                        <div class="method-number">03</div>
+                        <div class="method-content">
+                            <h3>Interleaved Learning</h3>
+                            <p>Mix different topics or subjects rather than focusing on one area for extended periods.</p>
+                            <a href="/methods/interleaved-learning" class="learn-more">Learn how <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="method-item">
+                        <div class="method-number">04</div>
+                        <div class="method-content">
+                            <h3>Elaborative Interrogation</h3>
+                            <p>Ask yourself "why" questions to deepen understanding of concepts and their applications.</p>
+                            <a href="/methods/elaborative-interrogation" class="learn-more">Learn how <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="testimonials">
+                <h2>Student Success Stories</h2>
+                <div class="testimonial-carousel">
+                    <div class="testimonial-item">
+                        <div class="testimonial-content">
+                            <p>"The learning resources provided by Skills On Demand transformed my educational experience. The combination of structured courses and flexible learning methods helped me achieve my goals faster than I expected."</p>
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-image">
+                                <!-- Placeholder for author image -->
+                                <div class="placeholder-avatar"></div>
+                            </div>
+                            <div class="author-info">
+                                <h4>Sarah Johnson</h4>
+                                <p>Web Development Graduate</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-item">
+                        <div class="testimonial-content">
+                            <p>"The study groups and community support features made all the difference in my learning journey. Being able to connect with peers facing similar challenges helped me overcome obstacles I couldn't solve alone."</p>
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-image">
+                                <!-- Placeholder for author image -->
+                                <div class="placeholder-avatar"></div>
+                            </div>
+                            <div class="author-info">
+                                <h4>Michael Chen</h4>
+                                <p>Data Science Student</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-nav">
+                    <button class="prev-btn"><i class="fas fa-chevron-left"></i></button>
+                    <button class="next-btn"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>"Skills On Demand"</h3>
+                    <p>Providing quality education and resources since 2023.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/courses">Courses</a></li>
+                        <li><a href="/learn">Learning</a></li>
+                        <li><a href="/register">Register</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <p><i class="fas fa-envelope"></i> contact@skillsondemand.org</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Follow Us</h3>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Skills On Demand. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

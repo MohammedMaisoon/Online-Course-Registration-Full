@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}Courses - LearnHub{% endblock %}
+
+{% block content %}
+<div class="courses-header">
+    <div class="container">
+        <h2>Explore Our Courses</h2>
+        <p>Browse through our extensive collection of high-quality courses designed to help you acquire new skills and advance your career.</p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="courses-filter">
+        <form action="{{ url_for('courses') }}" method="GET">
+            <div class="filter-group">
+                <label for="category">Category</label>
+                <select name="category" id="category">
+                    <option value="">All Categories</option>
+                    {% for cat in categories %}
+                    <option value="{{ cat }}" {% if category == cat %}selected{% endif %}>{{ cat }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label for="level">Level</label>
+                <select name="level" id="level">
+                    <option value="">All Levels</option>
+                    {% for lvl in levels %}
+                    <option value="{{ lvl }}" {% if level == lvl %}selected{% endif %}>{{ lvl }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label for="search">Search</label>
+                <input type="text" name="search" id="search" placeholder="Search courses..." value="{{ search }}">
+            </div>
+            
+            <button type="submit" class="btn-filter">Apply Filters</button>
+        </form>
+    </div>
+    
+    <div class="courses-main">
+        <p>Showing {{ courses|length }} of {{ total_courses }} courses</p>
+        
+        <div class="course-list-grid">
+            {% for course in courses %}
+            <div class="course-card">
+                <div class="course-image">
+                    <img src="{{ url_for('static', filename='img/course-placeholder.jpg') }}" alt="{{ course.title }}">
+                </div>
+                <div class="course-content">
+                    <h3>{{ course.title }}</h3>
+                    <p>{{ course.description[:100] }}{% if course.description|length > 100 %}...{% endif %}</p>
+                    <div class="course-meta">
+                        <span><i class="fas fa-user"></i> {{ course.students_count|default(0) }} students</span>
+                        <span><i class="fas fa-star"></i> {{ course.rating|default('New', true) }}</span>
+                        <span><i class="fas fa-layer-group"></i> {{ course.level }}</span>
+                    </div>
+                    <a href="{{ url_for('course_detail', course_id=course.id) }}" class="btn-course">View Course</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        {% if total_pages > 1 %}
+        <div class="pagination">
+            {% for i in range(1, total_pages + 1) %}
+                {% if i == current_page %}
+                <span class="current">{{ i }}</span>
+                {% else %}
+                <a href="{{ url_for('courses', page=i, category=category, level=level, search=search) }}">{{ i }}</a>
+                {% endif %}
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
